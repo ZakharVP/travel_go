@@ -23,7 +23,7 @@ struct ChoiceRoute: View {
                             Text(fromStationText)
                                 .font(.system(size: 17, weight: .regular))
                                 .foregroundColor(
-                                    fromStation == nil ? .gray : .primary
+                                    fromStation == nil ? .gray : .black
                                 )
                                 .lineLimit(1)
                             Spacer()
@@ -40,7 +40,7 @@ struct ChoiceRoute: View {
                             Text(toStationText)
                                 .font(.system(size: 17, weight: .regular))
                                 .foregroundColor(
-                                    toStation == nil ? .gray : .primary
+                                    toStation == nil ? .gray : .black
                                 )
                                 .lineLimit(1)
                             Spacer()

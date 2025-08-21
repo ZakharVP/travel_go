@@ -18,10 +18,10 @@ struct SettingsView: View {
             // Надпись под картинкой
             Text("Ошибка сервера")
                 .font(.system(size: 20, weight: .semibold))
-                .foregroundColor(.black)
+                .foregroundColor(.primary)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color.white)
+        .background(Color(.systemBackground))
     }
 }
 

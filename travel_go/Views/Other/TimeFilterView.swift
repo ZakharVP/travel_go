@@ -42,7 +42,7 @@ struct TimeFilterView: View {
                 
                 Text("Время отправления")
                     .font(.system(size: 24, weight: .bold))
-                    .foregroundColor(.black)
+                    .foregroundColor(.primary)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.horizontal, 16)
                     .padding(.top, 24)
@@ -57,7 +57,7 @@ struct TimeFilterView: View {
                                     .font(.system(size: 17, weight: .semibold))
                                 Text(option.timeRange)
                                     .font(.system(size: 15))
-                                    .foregroundColor(.gray)
+                                    .foregroundColor(.primary)
                             }
 
                             Spacer()
@@ -67,7 +67,7 @@ struct TimeFilterView: View {
                                     ? "checkmark.square.fill" : "square"
                             )
                             .foregroundColor(
-                                option.isSelected ? .black : .gray
+                                option.isSelected ? .primary : .gray
                             )
                             .font(.system(size: 22))
                         }
@@ -76,7 +76,7 @@ struct TimeFilterView: View {
                             option.isSelected.toggle()
                         }
                         .listRowSeparator(.hidden)
-                        .listRowBackground(Color.white)
+                        .listRowBackground(Color(.systemBackground))
                     }
                 }
                 .listStyle(PlainListStyle())
@@ -84,7 +84,7 @@ struct TimeFilterView: View {
 
                 Text("Показывать варианты с пересадками")
                     .font(.system(size: 24, weight: .bold))
-                    .foregroundColor(.black)
+                    .foregroundColor(.primary)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.horizontal, 16)
                     .padding(.top, 44)
@@ -102,7 +102,7 @@ struct TimeFilterView: View {
                                 systemName: option.isSelected
                                     ? "checkmark.circle.fill" : "circle"
                             )
-                            .foregroundColor(option.isSelected ? .black : .gray)
+                            .foregroundColor(option.isSelected ? .primary : .gray)
                             .font(.system(size: 22))
                         }
                         .contentShape(Rectangle())
@@ -113,7 +113,7 @@ struct TimeFilterView: View {
                             option.isSelected = true
                         }
                         .listRowSeparator(.hidden)
-                        .listRowBackground(Color.white)
+                        .listRowBackground(Color(.systemBackground))
                     }
                 }
                 .listStyle(PlainListStyle())
@@ -144,7 +144,7 @@ struct TimeFilterView: View {
                         dismiss()
                     } label: {
                         Image(systemName: "chevron.left")
-                            .foregroundColor(.black)
+                            .foregroundColor(.primary)
                             .font(.system(size: 20))
                     }
                 }

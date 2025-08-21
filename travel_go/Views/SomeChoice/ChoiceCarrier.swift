@@ -26,11 +26,11 @@ public struct ChoiceCarrier: View {
                     Text("\(fromStation) → \(toStation)")
                         .font(.system(size: 24, weight: .bold))
                 }
-                .foregroundColor(.black)
+                .foregroundColor(.primary)
                 .padding(.horizontal)
                 .padding(.vertical, 16)
                 .frame(maxWidth: .infinity)
-                .background(Color.white)
+                .background(Color(.systemBackground))
 
                 List {
                     if mockCarriers.isEmpty {
@@ -95,7 +95,7 @@ public struct ChoiceCarrier: View {
                     dismiss()
                 } label: {
                     Image(systemName: "chevron.left")
-                        .foregroundColor(.black)
+                        .foregroundColor(.primary)
                         .font(.system(size: 20))
                 }
             }

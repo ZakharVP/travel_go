@@ -21,10 +21,10 @@ struct CarrierDetail: View {
             // Надпись под картинкой
             Text("Нет интернета")
                 .font(.system(size: 20, weight: .semibold))
-                .foregroundColor(.black)
+                .foregroundColor(.primary)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color.white)
+        .background(Color(.systemBackground))
         .navigationTitle("Детали перевозчика")
         .navigationBarTitleDisplayMode(.inline)
     }

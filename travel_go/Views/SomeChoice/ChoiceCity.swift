@@ -60,11 +60,11 @@ struct ChoiceCity: View {
                         Spacer()
                         Text("Город не найден")
                             .font(.system(size: 20, weight: .semibold))
-                            .foregroundColor(.black)
+                            .foregroundColor(.primary)
                         Spacer()
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .background(Color.white)
+                    .background(Color(.systemBackground))
                 } else {
                     // Показываем список если есть результаты
                     List {
@@ -75,24 +75,24 @@ struct ChoiceCity: View {
                                 HStack {
                                     Text(city.name)
                                         .font(.system(size: 17))
-                                        .foregroundColor(.black)
+                                        .foregroundColor(.primary)
                                     Spacer()
                                     Image(systemName: "chevron.right")
-                                        .foregroundColor(.black)
+                                        .foregroundColor(.primary)
                                         .font(.system(size: 20))
                                 }
                                 .padding(.vertical, 12)
                                 .contentShape(Rectangle())
                             }
-                            .listRowBackground(Color.white)
+                            .listRowBackground(Color(.systemBackground))
                             .listRowSeparatorTint(.clear)
                         }
                     }
                     .listStyle(PlainListStyle())
-                    .background(Color.white)
+                    .background(Color(.systemBackground))
                 }
             }
-            .background(Color.white)
+            .background(Color(.systemBackground))
             .navigationTitle(title)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -101,7 +101,7 @@ struct ChoiceCity: View {
                         isPresented = false
                     } label: {
                         Image(systemName: "chevron.left")
-                            .foregroundColor(.black)
+                            .foregroundColor(.primary)
                     }
                 }
             }

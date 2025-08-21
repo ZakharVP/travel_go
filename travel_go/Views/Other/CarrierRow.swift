@@ -31,13 +31,14 @@ struct CarrierRow: View {
                 // Дата справа
                 Text("14 января")
                     .font(.system(size: 14))
-                    .foregroundColor(.gray)
+                    .foregroundColor(.black)
                     .padding(.trailing, 2)
             }
 
             HStack(spacing: 4) {
                 Text("22:30")
                     .font(.system(size: 15, weight: .medium))
+                    .foregroundColor(.black)
 
                 // Линия с точками
                 HStack(spacing: 0) {
@@ -50,7 +51,7 @@ struct CarrierRow: View {
 
                 Text("20 часов")
                     .font(.system(size: 13))
-                    .foregroundColor(.gray)
+                    .foregroundColor(.black)
 
                 // Вторая линия
                 HStack(spacing: 0) {
@@ -63,10 +64,11 @@ struct CarrierRow: View {
 
                 Text("08:15")
                     .font(.system(size: 15, weight: .medium))
+                    .foregroundColor(.black)
             }
         }
         .padding(16)
-        .background(Color.gray.opacity(0.1))
+        .background(Color("light_gray"))
         .cornerRadius(12)
         .padding(.horizontal, 8)
     }
