@@ -16,7 +16,7 @@ struct SettingsView: View {
                 .frame(width: 223, height: 223)
             
             // Надпись под картинкой
-            Text("Ошибка сервера")
+            Text(AppStrings.Errors.noServer)
                 .font(.system(size: 20, weight: .semibold))
                 .foregroundColor(.primary)
         }

@@ -58,7 +58,7 @@ struct ChoiceCity: View {
                     // Показываем сообщение если нет результатов
                     VStack(spacing: 16) {
                         Spacer()
-                        Text("Город не найден")
+                        Text(AppStrings.Errors.noCity)
                             .font(.system(size: 20, weight: .semibold))
                             .foregroundColor(.primary)
                         Spacer()

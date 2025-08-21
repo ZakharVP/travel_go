@@ -40,7 +40,7 @@ struct TimeFilterView: View {
         NavigationView {
             VStack(spacing: 0) {
                 
-                Text("Время отправления")
+                Text(AppStrings.Common.timeGo)
                     .font(.system(size: 24, weight: .bold))
                     .foregroundColor(.primary)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -82,7 +82,7 @@ struct TimeFilterView: View {
                 .listStyle(PlainListStyle())
                 .frame(height: 250)
 
-                Text("Показывать варианты с пересадками")
+                Text(AppStrings.Common.showTransfer)
                     .font(.system(size: 24, weight: .bold))
                     .foregroundColor(.primary)
                     .frame(maxWidth: .infinity, alignment: .leading)

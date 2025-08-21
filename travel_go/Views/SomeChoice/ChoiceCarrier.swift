@@ -35,7 +35,7 @@ public struct ChoiceCarrier: View {
                 List {
                     if mockCarriers.isEmpty {
                         VStack {
-                            Text("Нет результатов")
+                            Text(AppStrings.Errors.noResult)
                                 .font(.system(size: 17))
                                 .foregroundColor(.secondary)
                                 .padding()

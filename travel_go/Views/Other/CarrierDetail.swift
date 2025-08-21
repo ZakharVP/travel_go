@@ -19,7 +19,7 @@ struct CarrierDetail: View {
                 .frame(width: 223, height: 223)
             
             // Надпись под картинкой
-            Text("Нет интернета")
+            Text(AppStrings.Errors.noInternet)
                 .font(.system(size: 20, weight: .semibold))
                 .foregroundColor(.primary)
         }
