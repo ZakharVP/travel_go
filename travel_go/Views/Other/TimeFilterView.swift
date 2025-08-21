@@ -122,7 +122,6 @@ struct TimeFilterView: View {
                 Spacer()
 
                 Button(action: {
-                    print("Применены фильтры")
                     dismiss()
                 }) {
                     Text("Применить")

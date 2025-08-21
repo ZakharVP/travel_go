@@ -76,7 +76,6 @@ public struct ChoiceCarrier: View {
 
             Button(action: {
                 showingTimePicker = true
-                print("Уточнить время нажата")
             }) {
                 Text("Уточнить время")
                     .font(.system(size: 17, weight: .semibold))

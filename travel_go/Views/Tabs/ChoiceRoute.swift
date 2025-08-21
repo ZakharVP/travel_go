@@ -121,9 +121,6 @@ struct ChoiceRoute: View {
     }
 
     private func findRoutes() {
-        print(
-            "Поиск маршрута от \(fromStation?.name ?? "") до \(toStation?.name ?? "")"
-        )
         isShowingCarriers = true
     }
 
@@ -148,7 +145,6 @@ struct ChoiceRoute: View {
     }
 
     private func reverse() {
-        print("нажата кнопка реверс")
         (fromStation, toStation) = (toStation, fromStation)
     }
 }
