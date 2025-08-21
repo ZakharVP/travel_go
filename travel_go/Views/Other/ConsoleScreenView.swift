@@ -1,18 +1,19 @@
 //
-//  ContentView.swift
+//  MainAppView.swift
 //  travel_go
 //
-//  Created by Захар Панченко on 24.07.2025.
+//  Created by Захар Панченко on 11.08.2025.
 //
 
 import SwiftUI
 import OpenAPIURLSession
 
-struct ContentView: View {
+struct ConsoleScreenView: View {
+   
     @State private var copyrightInfo: String = "Загрузка..."
     @State private var stationsInfo: String = ""
     
-    var body: some View {
+    var body: some View { 
         VStack {
             Image(systemName: "globe")
                 .imageScale(.large)
@@ -785,5 +786,6 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+    ConsoleScreenView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
 }
+
