@@ -13,7 +13,10 @@ struct SettingsView: View {
             Image("no_server")
                 .resizable()
                 .scaledToFit()
-                .frame(width: 223, height: 223)
+                .frame(
+                    width: AppSize.Image.bigImageX,
+                    height: AppSize.Image.bigImageY
+                )
             
             // Надпись под картинкой
             Text(AppStrings.Errors.noServer)

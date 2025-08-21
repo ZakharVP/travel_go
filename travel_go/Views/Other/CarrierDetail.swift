@@ -16,7 +16,10 @@ struct CarrierDetail: View {
             Image("no_internet")
                 .resizable()
                 .scaledToFit()
-                .frame(width: 223, height: 223)
+                .frame(
+                    width: AppSize.Image.bigImageX,
+                    height: AppSize.Image.bigImageY
+                )
             
             // Надпись под картинкой
             Text(AppStrings.Errors.noInternet)
