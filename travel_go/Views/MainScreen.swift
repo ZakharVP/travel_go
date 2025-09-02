@@ -13,10 +13,10 @@ struct MainScreen: View {
     var body: some View {
         TabView(selection: $selectedTab) {
             ChoiceRoute()
-                .tabItem { Label("", image: "mainIcon") }
+                .tabItem { Label("", image: "MainIcon") }
                 .tag(0)
             SettingsView()
-                .tabItem { Label("", image: "settingsIcon") }
+                .tabItem { Label("", image: "SettingsIcon") }
                 .tag(1)
         }
     }
