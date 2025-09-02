@@ -26,88 +26,96 @@ struct ChoiceRoute: View {
     @EnvironmentObject var settingManager: SettingsManager
 
     var body: some View {
-        NavigationStack {
-            VStack {
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 12) {
-                        ForEach(Array(stories.enumerated()), id: \.element.id) { index, story in
-                            StoryCell(story: story)
-                                .onTapGesture {
-                                    isShowingStories = true
-                                    selectedStoryIndex = index
-                                    stories[index].isViewed = true
-                                }
-                        }
-                    }
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 8)
-                }
-                .background(settingManager.isDarkMode ? .black : .white)
-                
-                HStack {
-                    VStack(spacing: 0) {
-                        HStack {
-                            Text(fromStationText)
-                                .font(.system(size: 17, weight: .regular))
-                                .foregroundColor(
-                                    fromStation == nil ? .gray : .black
-                                )
-                                .lineLimit(1)
-                            Spacer()
-                        }
-                        .padding(.horizontal, 0)
-                        .padding(.bottom, 8)
-                        .background(.white)
-                        .contentShape(Rectangle())
-                        .onTapGesture {
-                            isShowingFromCity = true
-                        }
+         NavigationStack {
+             VStack(spacing: 0) { // Убираем стандартные отступы между элементами
+                 // Блок с историями
+                 ScrollView(.horizontal, showsIndicators: false) {
+                     HStack(spacing: 12) {
+                         ForEach(Array(stories.enumerated()), id: \.element.id) { index, story in
+                             StoryCell(story: story)
+                                 .onTapGesture {
+                                     isShowingStories = true
+                                     selectedStoryIndex = index
+                                     stories[index].isViewed = true
+                                 }
+                         }
+                     }
+                     .padding(.horizontal, 16)
+                     .padding(.vertical, 8)
+                 }
+                 .background(settingManager.isDarkMode ? .black : .white)
+                 .padding(.top, 24) // Отступ от safe area
+                 
+                 // Основной контент
+                 VStack {
+                     HStack {
+                         VStack(spacing: 0) {
+                             HStack {
+                                 Text(fromStationText)
+                                     .font(.system(size: 17, weight: .regular))
+                                     .foregroundColor(
+                                         fromStation == nil ? .gray : .black
+                                     )
+                                     .lineLimit(1)
+                                 Spacer()
+                             }
+                             .padding(.horizontal, 0)
+                             .padding(.bottom, 8)
+                             .background(.white)
+                             .contentShape(Rectangle())
+                             .onTapGesture {
+                                 isShowingFromCity = true
+                             }
 
-                        HStack {
-                            Text(toStationText)
-                                .font(.system(size: 17, weight: .regular))
-                                .foregroundColor(
-                                    toStation == nil ? .gray : .black
-                                )
-                                .lineLimit(1)
-                            Spacer()
-                        }
-                        .padding(.horizontal, 0)
-                        .padding(.top, 8)
-                        .background(.white)
-                        .contentShape(Rectangle())
-                        .onTapGesture {
-                            isShowingToCity = true
-                        }
-                    }
-                    .padding()
-                    .background(.white)
-                    .cornerRadius(20)
+                             HStack {
+                                 Text(toStationText)
+                                     .font(.system(size: 17, weight: .regular))
+                                     .foregroundColor(
+                                         toStation == nil ? .gray : .black
+                                     )
+                                     .lineLimit(1)
+                                 Spacer()
+                             }
+                             .padding(.horizontal, 0)
+                             .padding(.top, 8)
+                             .background(.white)
+                             .contentShape(Rectangle())
+                             .onTapGesture {
+                                 isShowingToCity = true
+                             }
+                         }
+                         .padding()
+                         .background(.white)
+                         .cornerRadius(20)
 
-                    Button(action: reverse) {
-                        Image(.changeIcon)
-                    }
-                    .padding(.horizontal, 4)
+                         Button(action: reverse) {
+                             Image(.changeIcon)
+                         }
+                         .padding(.horizontal, 4)
 
-                }
-                .padding()
-                .background(Color(.blueUniversal))
-                .cornerRadius(20)
-                .padding(.horizontal, 16)
+                     }
+                     .padding()
+                     .background(Color(.blueUniversal))
+                     .cornerRadius(20)
+                     .padding(.horizontal, 16)
+                     .padding(.top, 44) // Отступ 44 от блока с историями
 
-                if areBothStationsSelected {
-                    Button(action: findRoutes) {
-                        Text("Найти")
-                            .font(.system(size: 17, weight: .semibold))
-                            .foregroundColor(.white)
-                            .frame(width: 150, height: 60)
-                            .background(Color(.blueUniversal))
-                            .cornerRadius(12)
-                    }
-                    .padding(.top, 16)
-                }
-            }
-        }
+                     if areBothStationsSelected {
+                         Button(action: findRoutes) {
+                             Text("Найти")
+                                 .font(.system(size: 17, weight: .semibold))
+                                 .foregroundColor(.white)
+                                 .frame(width: 150, height: 60)
+                                 .background(Color(.blueUniversal))
+                                 .cornerRadius(12)
+                         }
+                         .padding(.top, 16)
+                     }
+                     
+                     Spacer() // Растягиваем контент вверх
+                 }
+             }
+         }
         .fullScreenCover(isPresented: $isShowingFromCity) {
             ChoiceCity(
                 isForFrom: true,
