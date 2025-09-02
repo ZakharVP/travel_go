@@ -68,7 +68,7 @@ struct CarrierRow: View {
             }
         }
         .padding(16)
-        .background(Color("light_gray"))
+        .background(Color("lightGray"))
         .cornerRadius(12)
         .padding(.horizontal, 8)
     }
