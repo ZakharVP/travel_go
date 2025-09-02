@@ -9,8 +9,8 @@ import SwiftUI
 
 struct Story: Identifiable {
     let id = UUID()
-    let imageName: String
-    let title: String
-    let smallText: String
+    var imageName: String
+    var title: String
+    var smallText: String
     var isViewed: Bool = false
 }

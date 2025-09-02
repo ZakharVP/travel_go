@@ -31,9 +31,7 @@ struct ChoiceRoute: View {
                         ForEach(Array(stories.enumerated()), id: \.element.id) { index, story in
                             StoryCell(story: story)
                                 .onTapGesture {
-                                    if index == 1 {
-                                        isShowingStories = true
-                                    }
+                                    isShowingStories = true
                                     selectedStoryIndex = index
                                     stories[index].isViewed = true
                                 }
@@ -132,6 +130,7 @@ struct ChoiceRoute: View {
         }
         .fullScreenCover(isPresented: $isShowingStories) {
             StoriesView(
+                stories: stories,
                 selectedStoryIndex: $selectedStoryIndex,
                 isPresented: $isShowingStories
             )
