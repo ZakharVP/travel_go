@@ -22,6 +22,8 @@ struct ChoiceRoute: View {
         Story(imageName: "storiesThree", title: "Стоп кран", smallText: AppStrings.StoryText.small, isViewed: false),
         Story(imageName: "storiesFour", title: "Пустой вагон", smallText: AppStrings.StoryText.small, isViewed: false),
     ]
+    
+    @EnvironmentObject var settingManager: SettingsManager
 
     var body: some View {
         NavigationStack {
@@ -40,7 +42,7 @@ struct ChoiceRoute: View {
                     .padding(.horizontal, 16)
                     .padding(.vertical, 8)
                 }
-                .background(Color.white)
+                .background(settingManager.isDarkMode ? .black : .white)
                 
                 HStack {
                     VStack(spacing: 0) {
