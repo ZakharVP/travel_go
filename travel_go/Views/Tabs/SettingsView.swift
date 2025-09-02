@@ -25,6 +25,7 @@ struct SettingsView: View {
                     set: { settingsManager.isDarkMode = $0 }
                 ))
                 .labelsHidden()
+                .tint(.blue)
             }
             .frame(height: 60)
             .padding(.horizontal, 16)

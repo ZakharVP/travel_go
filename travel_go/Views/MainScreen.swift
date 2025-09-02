@@ -9,28 +9,25 @@ import SwiftUI
 
 struct MainScreen: View {
     @State private var selectedTab: Int = 0
-    @Environment(\.colorScheme) private var colorScheme
-
+    @EnvironmentObject var settingsManager: SettingsManager
+    
     var body: some View {
         TabView(selection: $selectedTab) {
             ChoiceRoute()
                 .tabItem {
                     Image("MainIcon")
                         .renderingMode(.template)
-                        .foregroundColor(selectedTab == 0 ?
-                                       (colorScheme == .dark ? .white : .blackUniversal) : .grayUniversal)
                 }
                 .tag(0)
+            
             SettingsView()
                 .tabItem {
                     Image("SettingsIcon")
                         .renderingMode(.template)
-                        .foregroundColor(selectedTab == 1 ?
-                                       (colorScheme == .dark ? .white : .blackUniversal) : .grayUniversal)
                 }
                 .tag(1)
         }
-        .tint(colorScheme == .dark ? .white : .blackUniversal)
+        .tint(.primary)
     }
 }
 
