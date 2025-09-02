@@ -18,4 +18,10 @@ enum AppStrings {
         static let showTransfer = "Показывать варианты с пересадками"
         
     }
+    
+    enum StoryText {
+        static let small = "Text Text Text Text Text Text Text Text Text"
+        static let fullScreenBig = "Text Text Text Text Text Text Text Text Text Text"
+        static let fullScreenSmall = "Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text"
+    }
 }

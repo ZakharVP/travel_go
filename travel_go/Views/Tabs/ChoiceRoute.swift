@@ -13,10 +13,37 @@ struct ChoiceRoute: View {
     @State private var isShowingFromCity = false
     @State private var isShowingToCity = false
     @State private var isShowingCarriers = false
+    @State private var isShowingStories = false
+    @State private var selectedStoryIndex = 0
+    
+    @State private var stories: [Story] = [
+        Story(imageName: "storiesOne", title: "Механик", smallText: AppStrings.StoryText.small, isViewed: false),
+        Story(imageName: "storiesTwo", title: "Проводница", smallText: AppStrings.StoryText.small, isViewed: false),
+        Story(imageName: "storiesThree", title: "Стоп кран", smallText: AppStrings.StoryText.small, isViewed: false),
+        Story(imageName: "storiesFour", title: "Пустой вагон", smallText: AppStrings.StoryText.small, isViewed: false),
+    ]
 
     var body: some View {
         NavigationStack {
             VStack {
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 12) {
+                        ForEach(Array(stories.enumerated()), id: \.element.id) { index, story in
+                            StoryCell(story: story)
+                                .onTapGesture {
+                                    if index == 1 {
+                                        isShowingStories = true
+                                    }
+                                    selectedStoryIndex = index
+                                    stories[index].isViewed = true
+                                }
+                        }
+                    }
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 8)
+                }
+                .background(Color.white)
+                
                 HStack {
                     VStack(spacing: 0) {
                         HStack {
@@ -58,13 +85,13 @@ struct ChoiceRoute: View {
                     .cornerRadius(20)
 
                     Button(action: reverse) {
-                        Image("change_icon")
+                        Image(.changeIcon)
                     }
                     .padding(.horizontal, 4)
 
                 }
                 .padding()
-                .background(Color("blue_universal"))
+                .background(Color(.blueUniversal))
                 .cornerRadius(20)
                 .padding(.horizontal, 16)
 
@@ -74,7 +101,7 @@ struct ChoiceRoute: View {
                             .font(.system(size: 17, weight: .semibold))
                             .foregroundColor(.white)
                             .frame(width: 150, height: 60)
-                            .background(Color("blue_universal"))
+                            .background(Color(.blueUniversal))
                             .cornerRadius(12)
                     }
                     .padding(.top, 16)
@@ -102,6 +129,12 @@ struct ChoiceRoute: View {
                     toStation: toStationText
                 )
             }
+        }
+        .fullScreenCover(isPresented: $isShowingStories) {
+            StoriesView(
+                selectedStoryIndex: $selectedStoryIndex,
+                isPresented: $isShowingStories
+            )
         }
     }
 

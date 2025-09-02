@@ -82,7 +82,7 @@ public struct ChoiceCarrier: View {
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
                     .frame(height: 60)
-                    .background(Color("blue_universal"))
+                    .background(Color(.blueUniversal))
                     .cornerRadius(12)
             }
             .padding(.horizontal, 16)
