@@ -13,7 +13,7 @@ struct CarrierDetail: View {
     
     var body: some View {
         ScrollView {
-            VStack(spacing: 0) {
+            VStack(spacing: .zero) {
                 // Картинка в указанном размере
                 Image(.mocRGD)
                     .resizable()

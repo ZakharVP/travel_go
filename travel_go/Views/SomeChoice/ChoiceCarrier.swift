@@ -21,7 +21,7 @@ public struct ChoiceCarrier: View {
     public var body: some View {
         ZStack(alignment: .bottom) {
             // Основной контент
-            VStack(spacing: 0) {
+            VStack(spacing: .zero) {
                 HStack(spacing: 8) {
                     Text("\(fromStation) → \(toStation)")
                         .font(.system(size: 24, weight: .bold))

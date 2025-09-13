@@ -27,7 +27,7 @@ struct ChoiceRoute: View {
 
     var body: some View {
          NavigationStack {
-             VStack(spacing: 0) { // Убираем стандартные отступы между элементами
+             VStack(spacing: .zero) { // Убираем стандартные отступы между элементами
                  // Блок с историями
                  ScrollView(.horizontal, showsIndicators: false) {
                      HStack(spacing: 12) {
@@ -49,7 +49,7 @@ struct ChoiceRoute: View {
                  // Основной контент
                  VStack {
                      HStack {
-                         VStack(spacing: 0) {
+                         VStack(spacing: .zero) {
                              HStack {
                                  Text(fromStationText)
                                      .font(.system(size: 17, weight: .regular))

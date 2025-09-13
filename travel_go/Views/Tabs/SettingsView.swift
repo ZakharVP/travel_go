@@ -11,7 +11,7 @@ struct SettingsView: View {
     @State private var showUserAgreement = false
     
     var body: some View {
-        VStack(spacing: 0) {
+        VStack(spacing: .zero) {
             // Блок с темной темой
             HStack {
                 Text("Темная тема")
