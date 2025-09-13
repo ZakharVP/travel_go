@@ -9,16 +9,25 @@ import SwiftUI
 
 struct MainScreen: View {
     @State private var selectedTab: Int = 0
-
+    @EnvironmentObject var settingsManager: SettingsManager
+    
     var body: some View {
         TabView(selection: $selectedTab) {
             ChoiceRoute()
-                .tabItem { Label("", image: "MainIcon") }
-                .tag(0)
+                .tabItem {
+                    Image("MainIcon")
+                        .renderingMode(.template)
+                }
+                .tag(Tab.main)
+            
             SettingsView()
-                .tabItem { Label("", image: "SettingsIcon") }
-                .tag(1)
+                .tabItem {
+                    Image("SettingsIcon")
+                        .renderingMode(.template)
+                }
+                .tag(Tab.settings)
         }
+        .tint(.primary)
     }
 }
 

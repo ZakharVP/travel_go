@@ -38,7 +38,7 @@ struct TimeFilterView: View {
 
     var body: some View {
         NavigationView {
-            VStack(spacing: 0) {
+            VStack(spacing: .zero) {
                 
                 Text(AppStrings.Common.timeGo)
                     .font(.system(size: 24, weight: .bold))
@@ -129,7 +129,7 @@ struct TimeFilterView: View {
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
                         .frame(height: 60)
-                        .background(Color("blue_universal"))
+                        .background(Color(.blueUniversal))
                         .cornerRadius(12)
                 }
                 .padding(.horizontal, 16)
