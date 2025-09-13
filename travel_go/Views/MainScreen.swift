@@ -18,14 +18,14 @@ struct MainScreen: View {
                     Image("MainIcon")
                         .renderingMode(.template)
                 }
-                .tag(0)
+                .tag(Tab.main)
             
             SettingsView()
                 .tabItem {
                     Image("SettingsIcon")
                         .renderingMode(.template)
                 }
-                .tag(1)
+                .tag(Tab.settings)
         }
         .tint(.primary)
     }
