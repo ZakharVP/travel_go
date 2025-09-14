@@ -9,12 +9,37 @@ import SwiftUI
 
 class SettingsManager: ObservableObject {
     static let shared = SettingsManager()
-    
-    @Published var isDarkMode: Bool = UserDefaults.standard.bool(forKey: "darkMode") {
+
+    private let themeStorage: ThemeStorageProtocol
+
+    @Published var currentTheme: AppTheme {
         didSet {
-            UserDefaults.standard.set(isDarkMode, forKey: "darkMode")
+            themeStorage.saveTheme(currentTheme)
+            applyTheme()
+        }
+    }
+
+    private init(themeStorage: ThemeStorageProtocol = ThemeStorageService()) {
+        self.themeStorage = themeStorage
+        self.currentTheme = themeStorage.loadTheme()
+        applyTheme()
+    }
+
+    func applyTheme() {
+        objectWillChange.send()
+        print("Тема изменена на: \(currentTheme.displayName)")
+    }
+
+    var colorScheme: ColorScheme? {
+        switch currentTheme {
+        case .light: return .light
+        case .dark: return .dark
+        case .system: return nil
         }
     }
     
-    private init() {}
+    var isDarkMode: Bool {
+        get { currentTheme == .dark }
+        set { currentTheme = newValue ? .dark : .light }
+    }
 }

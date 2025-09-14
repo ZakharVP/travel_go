@@ -5,26 +5,26 @@
 //  Created by Захар Панченко on 24.07.2025.
 //
 
-// 
+//
 
 import SwiftUI
 
 @main
 struct travel_goApp: App {
-    @AppStorage("darkMode") var isDarkMode: Bool = false
     @StateObject private var settingsManager = SettingsManager.shared
-    
+    @Environment(\.scenePhase) var scenePhase
+
     var body: some Scene {
         WindowGroup {
             MainScreen()
-                .environment(\.managedObjectContext, persistenceController.container.viewContext)
+                .environment(
+                    \.managedObjectContext,
+                    persistenceController.container.viewContext
+                )
                 .environmentObject(settingsManager)
-                .preferredColorScheme(isDarkMode ? .dark : .light)
-                .onChange(of: isDarkMode) { newValue in
-                    settingsManager.isDarkMode = newValue
-                }
+                .preferredColorScheme(settingsManager.colorScheme)
         }
     }
-    
+
     let persistenceController = PersistenceController.shared
 }

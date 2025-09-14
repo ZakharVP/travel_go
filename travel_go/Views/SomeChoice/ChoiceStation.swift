@@ -11,76 +11,36 @@ struct ChoiceStation: View {
     let city: City
     @Binding var isPresented: Bool
     @Binding var selectedStation: Station?
-    @State private var searchText = ""
+    
+    @StateObject private var viewModel: ChoiceStationViewModel
     @Environment(\.dismiss) private var dismiss
     
-    var title = "Выбор станции"
+    private var title = "Выбор станции"
     
-    var filteredStations: [Station] {
-        if searchText.isEmpty {
-            return city.stations
-        } else {
-            return city.stations.filter { station in
-                station.name.localizedCaseInsensitiveContains(searchText) ||
-                station.code.localizedCaseInsensitiveContains(searchText)
-            }
-        }
+    init(city: City, isPresented: Binding<Bool>, selectedStation: Binding<Station?>) {
+        self.city = city
+        self._isPresented = isPresented
+        self._selectedStation = selectedStation
+        self._viewModel = StateObject(wrappedValue: ChoiceStationViewModel(city: city))
     }
-
+    
     var body: some View {
         VStack {
             // Строка поиска
-            HStack {
-                Image(systemName: "magnifyingglass")
-                    .foregroundColor(.gray)
-                
-                TextField("Поиск станции", text: $searchText)
-                    .textFieldStyle(PlainTextFieldStyle())
-                    .autocapitalization(.none)
-                    .disableAutocorrection(true)
-                
-                if !searchText.isEmpty {
-                    Button(action: {
-                        searchText = ""
-                    }) {
-                        Image(systemName: "xmark.circle.fill")
-                            .foregroundColor(.gray)
-                    }
-                }
-            }
-            .padding(10)
-            .background(Color(.systemGray6))
-            .cornerRadius(10)
-            .padding(.horizontal)
-            .padding(.top)
+            searchField
             
-            // Список станций
-            List {
-                ForEach(filteredStations) { station in
-                    Button {
-                        selectedStation = station
-                        isPresented = false
-                    } label: {
-                        HStack {
-                            VStack(alignment: .leading, spacing: 4) {
-                                Text(station.name)
-                                    .font(.system(size: 17))
-                                    .foregroundColor(.primary)
-                            }
-                            Spacer()
-                            Image(systemName: "chevron.right")
-                                .foregroundColor(.primary)
-                                .font(.system(size: 20))
-                        }
-                        .padding(.vertical, 12)
-                        .contentShape(Rectangle())
-                    }
-                    .listRowBackground(Color(.systemBackground))
-                    .listRowSeparatorTint(.clear)
+            // Контент в зависимости от состояния
+            Group {
+                if viewModel.isLoading {
+                    loadingView
+                } else if let error = viewModel.error {
+                    errorView(error: error)
+                } else if viewModel.filteredStations.isEmpty {
+                    emptyView
+                } else {
+                    stationsList
                 }
             }
-            .listStyle(PlainListStyle())
-            .background(Color(.systemBackground))
         }
         .background(Color(.systemBackground))
         .navigationTitle(title)
@@ -96,5 +56,130 @@ struct ChoiceStation: View {
                 }
             }
         }
+        .task {
+            await viewModel.loadStationsIfNeeded()
+        }
+    }
+    
+    private var searchField: some View {
+        HStack {
+            Image(systemName: "magnifyingglass")
+                .foregroundColor(.gray)
+            
+            TextField("Поиск станции", text: $viewModel.searchText)
+                .textFieldStyle(PlainTextFieldStyle())
+                .autocapitalization(.none)
+                .disableAutocorrection(true)
+            
+            if !viewModel.searchText.isEmpty {
+                Button {
+                    viewModel.searchText = ""
+                } label: {
+                    Image(systemName: "xmark.circle.fill")
+                        .foregroundColor(.gray)
+                }
+            }
+        }
+        .padding(10)
+        .background(Color(.systemGray6))
+        .cornerRadius(10)
+        .padding(.horizontal)
+        .padding(.top)
+    }
+    
+    private var stationsList: some View {
+        List {
+            ForEach(viewModel.filteredStations) { station in
+                Button {
+                    viewModel.selectStation(station, isPresented: $isPresented, selectedStation: $selectedStation)
+                } label: {
+                    HStack {
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text(station.name)
+                                .font(.system(size: 17))
+                                .foregroundColor(.primary)
+                            
+                            Text(station.city ?? "Неизвестный город")
+                                .font(.system(size: 14))
+                                .foregroundColor(.secondary)
+                        }
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                            .foregroundColor(.gray)
+                            .font(.system(size: 14))
+                    }
+                    .padding(.vertical, 8)
+                    .contentShape(Rectangle())
+                }
+                .listRowBackground(Color(.systemBackground))
+            }
+        }
+        .listStyle(PlainListStyle())
+        .background(Color(.systemBackground))
+    }
+    
+    private var loadingView: some View {
+        ProgressView("Загрузка станций...")
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+    
+    private var emptyView: some View {
+        VStack(spacing: 16) {
+            Image(systemName: "tram.fill")
+                .font(.system(size: 50))
+                .foregroundColor(.gray)
+            
+            Text("Станции не найдены")
+                .font(.headline)
+                .foregroundColor(.primary)
+            
+            if !viewModel.searchText.isEmpty {
+                Text("Попробуйте изменить запрос")
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+            }
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+    
+    private func errorView(error: String) -> some View {
+        VStack(spacing: 16) {
+            Image(systemName: "wifi.exclamationmark")
+                .font(.system(size: 50))
+                .foregroundColor(.red)
+            
+            Text("Ошибка загрузки")
+                .font(.headline)
+                .foregroundColor(.primary)
+            
+            Text(error)
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+                .multilineTextAlignment(.center)
+            
+            Button("Повторить") {
+                Task {
+                    await viewModel.loadStationsIfNeeded()
+                }
+            }
+            .buttonStyle(.bordered)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .padding()
+    }
+}
+
+#Preview {
+    NavigationView {
+        ChoiceStation(
+            city: City(
+                id: "c1",
+                name: "Москва",
+                country: "Россия",
+                stations: []
+            ),
+            isPresented: .constant(true),
+            selectedStation: .constant(nil)
+        )
     }
 }
