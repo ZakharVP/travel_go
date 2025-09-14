@@ -10,12 +10,12 @@ import OpenAPIURLSession
 
 typealias ThreadStationsResponse = Components.Schemas.ThreadStationsResponse
 
-final class ThreadService: NetworkServiceProtocol {
+actor ThreadService: NetworkServiceProtocol {
+    private let client: Client
+    private let apiKey: String
     
-    let client: Client
-    let apiKey: String
-    
-    init(client: Client, apiKey: String) {
+    nonisolated init(client: Client = Client(serverURL: try! Servers.server1(), transport: URLSessionTransport()),
+                    apiKey: String = APIKeys.yandexStationKey) {
         self.client = client
         self.apiKey = apiKey
     }
@@ -43,4 +43,36 @@ final class ThreadService: NetworkServiceProtocol {
         )
         return try response.ok.body.json
     }
+    
+    // MARK: - Protocol Stubs
+    nonisolated func fetchCities() async throws -> [City] {
+        throw NetworkError(message: "Not implemented in ThreadService")
+    }
+    
+    nonisolated func fetchStations(for city: String) async throws -> [Station] {
+        throw NetworkError(message: "Not implemented in ThreadService")
+    }
+    
+    nonisolated func fetchCarrierInfo(code: String, system: String?) async throws -> Carrier {
+        throw NetworkError(message: "Not implemented in ThreadService")
+    }
+    
+    nonisolated func fetchNearestCity(latitude: Double, longitude: Double, distance: Int?) async throws -> NearestCityResponse {
+        throw NetworkError(message: "Not implemented in ThreadService")
+    }
+    
+    nonisolated func getScheduleBetweenStations(
+        from: String,
+        to: String,
+        date: String? = nil,
+        lang: String? = nil,
+        format: String? = nil,
+        transportTypes: String? = nil,
+        limit: Int? = nil,
+        offset: Int? = nil,
+        transfers: Bool? = nil
+    ) async throws -> Segments {
+        throw NetworkError(message: "Not implemented in ThreadService")
+    }
 }
+

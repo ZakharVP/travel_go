@@ -10,12 +10,12 @@ import OpenAPIURLSession
 
 typealias ScheduleResponse = Components.Schemas.ScheduleResponse
 
-final class ScheduleService: NetworkServiceProtocol {
+actor ScheduleService: NetworkServiceProtocol {
+    private let client: Client
+    private let apiKey: String
     
-    let client: Client
-    let apiKey: String
-    
-    init(client: Client, apiKey: String) {
+    nonisolated init(client: Client = Client(serverURL: try! Servers.server1(), transport: URLSessionTransport()),
+                    apiKey: String = APIKeys.yandexStationKey) {
         self.client = client
         self.apiKey = apiKey
     }
@@ -25,7 +25,7 @@ final class ScheduleService: NetworkServiceProtocol {
         date: String? = nil,
         transportTypes: String? = nil,
         event: String? = nil,
-        direction: String? = nil 
+        direction: String? = nil
     ) async throws -> ScheduleResponse {
         let response = try await client.getStationSchedule(
             query: .init(
@@ -38,5 +38,36 @@ final class ScheduleService: NetworkServiceProtocol {
             )
         )
         return try response.ok.body.json
+    }
+    
+    // MARK: - Protocol Stubs
+    nonisolated func fetchCities() async throws -> [City] {
+        throw NetworkError(message: "Not implemented in ScheduleService")
+    }
+    
+    nonisolated func fetchStations(for city: String) async throws -> [Station] {
+        throw NetworkError(message: "Not implemented in ScheduleService")
+    }
+    
+    nonisolated func fetchCarrierInfo(code: String, system: String?) async throws -> Carrier {
+        throw NetworkError(message: "Not implemented in ScheduleService")
+    }
+    
+    nonisolated func fetchNearestCity(latitude: Double, longitude: Double, distance: Int?) async throws -> NearestCityResponse {
+        throw NetworkError(message: "Not implemented in ScheduleService")
+    }
+    
+    nonisolated func getScheduleBetweenStations(
+        from: String,
+        to: String,
+        date: String? = nil,
+        lang: String? = nil,
+        format: String? = nil,
+        transportTypes: String? = nil,
+        limit: Int? = nil,
+        offset: Int? = nil,
+        transfers: Bool? = nil
+    ) async throws -> Segments {
+        throw NetworkError(message: "Not implemented in ScheduleService")
     }
 }

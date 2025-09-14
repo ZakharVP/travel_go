@@ -7,8 +7,9 @@
 import SwiftUI
 
 struct SettingsView: View {
-    @EnvironmentObject var settingsManager: SettingsManager
+    @StateObject private var viewModel = SettingsViewModel()
     @State private var showUserAgreement = false
+    @Environment(\.dismiss) private var dismiss
     
     var body: some View {
         VStack(spacing: .zero) {
@@ -20,21 +21,17 @@ struct SettingsView: View {
                 
                 Spacer()
                 
-                Toggle("", isOn: Binding(
-                    get: { settingsManager.isDarkMode },
-                    set: { settingsManager.isDarkMode = $0 }
-                ))
+                Toggle("", isOn: $viewModel.isDarkMode)
                 .labelsHidden()
                 .tint(.blue)
             }
             .frame(height: 60)
             .padding(.horizontal, 16)
             
-            
             // Блок с пользовательским соглашением 
-            Button(action: {
+            Button {
                 showUserAgreement = true
-            }) {
+            } label: {
                 HStack {
                     Text("Пользовательское соглашение")
                         .font(.system(size: 17))

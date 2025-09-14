@@ -11,85 +11,31 @@ struct ChoiceCity: View {
     let isForFrom: Bool
     @Binding var isPresented: Bool
     @Binding var selectedStation: Station?
+    
+    @StateObject private var viewModel = ChoiceCityViewModel()
     @State private var navigationPath = NavigationPath()
-    @State private var searchText = ""
     
-    var title = "Выбор города"
-    
-    var filteredCities: [City] {
-        if searchText.isEmpty {
-            return mockCities
-        } else {
-            return mockCities.filter { city in
-                city.name.localizedCaseInsensitiveContains(searchText)
-            }
-        }
+    private var title: String {
+        isForFrom ? "Откуда" : "Куда"
     }
     
     var body: some View {
         NavigationStack(path: $navigationPath) {
             VStack {
-                HStack {
-                    Image(systemName: "magnifyingglass")
-                        .foregroundColor(.gray)
-                    
-                    TextField("Поиск города", text: $searchText)
-                        .textFieldStyle(PlainTextFieldStyle())
-                        .autocapitalization(.none)
-                        .disableAutocorrection(true)
-                    
-                    if !searchText.isEmpty {
-                        Button(action: {
-                            searchText = ""
-                        }) {
-                            Image(systemName: "xmark.circle.fill")
-                                .foregroundColor(.gray)
-                        }
-                    }
-                }
-                .padding(10)
-                .background(Color(.systemGray6))
-                .cornerRadius(10)
-                .padding(.horizontal)
-                .padding(.top)
+                // Строка поиска
+                searchField
                 
-                // Проверяем есть ли результаты поиска
-                if filteredCities.isEmpty && !searchText.isEmpty {
-                    // Показываем сообщение если нет результатов
-                    VStack(spacing: 16) {
-                        Spacer()
-                        Text(AppStrings.Errors.noCity)
-                            .font(.system(size: 20, weight: .semibold))
-                            .foregroundColor(.primary)
-                        Spacer()
+                // Контент в зависимости от состояния
+                Group {
+                    if viewModel.isLoading {
+                        loadingView
+                    } else if let error = viewModel.error {
+                        errorView(error: error)
+                    } else if viewModel.filteredCities.isEmpty && !viewModel.searchText.isEmpty {
+                        noResultsView
+                    } else {
+                        citiesList
                     }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .background(Color(.systemBackground))
-                } else {
-                    // Показываем список если есть результаты
-                    List {
-                        ForEach(filteredCities) { city in
-                            Button(action: {
-                                navigationPath.append(city)
-                            }) {
-                                HStack {
-                                    Text(city.name)
-                                        .font(.system(size: 17))
-                                        .foregroundColor(.primary)
-                                    Spacer()
-                                    Image(systemName: "chevron.right")
-                                        .foregroundColor(.primary)
-                                        .font(.system(size: 20))
-                                }
-                                .padding(.vertical, 12)
-                                .contentShape(Rectangle())
-                            }
-                            .listRowBackground(Color(.systemBackground))
-                            .listRowSeparatorTint(.clear)
-                        }
-                    }
-                    .listStyle(PlainListStyle())
-                    .background(Color(.systemBackground))
                 }
             }
             .background(Color(.systemBackground))
@@ -112,6 +58,122 @@ struct ChoiceCity: View {
                     selectedStation: $selectedStation
                 )
             }
+            .task {
+                await viewModel.loadCities()
+            }
         }
     }
+    
+    private var searchField: some View {
+        HStack {
+            Image(systemName: "magnifyingglass")
+                .foregroundColor(.gray)
+            
+            TextField("Поиск города", text: $viewModel.searchText)
+                .textFieldStyle(PlainTextFieldStyle())
+                .autocapitalization(.none)
+                .disableAutocorrection(true)
+            
+            if !viewModel.searchText.isEmpty {
+                Button {
+                    viewModel.searchText = ""
+                } label: {
+                    Image(systemName: "xmark.circle.fill")
+                        .foregroundColor(.gray)
+                }
+            }
+        }
+        .padding(10)
+        .background(Color(.systemGray6))
+        .cornerRadius(10)
+        .padding(.horizontal)
+        .padding(.top)
+    }
+    
+    private var citiesList: some View {
+        List {
+            ForEach(viewModel.filteredCities) { city in
+                Button {
+                    navigationPath.append(city)
+                } label: {
+                    HStack {
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text(city.name)
+                                .font(.system(size: 17))
+                                .foregroundColor(.primary)
+                            
+                            Text(city.country)
+                                .font(.system(size: 14))
+                                .foregroundColor(.secondary)
+                        }
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                            .foregroundColor(.gray)
+                            .font(.system(size: 14))
+                    }
+                    .padding(.vertical, 8)
+                    .contentShape(Rectangle())
+                }
+                .listRowBackground(Color(.systemBackground))
+            }
+        }
+        .listStyle(PlainListStyle())
+        .background(Color(.systemBackground))
+    }
+    
+    private var loadingView: some View {
+        ProgressView("Загрузка городов...")
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+    
+    private var noResultsView: some View {
+        VStack(spacing: 16) {
+            Image(systemName: "building.2.crop.circle")
+                .font(.system(size: 50))
+                .foregroundColor(.gray)
+            
+            Text("Город не найден")
+                .font(.headline)
+                .foregroundColor(.primary)
+            
+            Text("Попробуйте изменить запрос")
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+    
+    private func errorView(error: String) -> some View {
+        VStack(spacing: 16) {
+            Image(systemName: "wifi.exclamationmark")
+                .font(.system(size: 50))
+                .foregroundColor(.red)
+            
+            Text("Ошибка загрузки")
+                .font(.headline)
+                .foregroundColor(.primary)
+            
+            Text(error)
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+                .multilineTextAlignment(.center)
+            
+            Button("Повторить") {
+                Task {
+                    await viewModel.loadCities()
+                }
+            }
+            .buttonStyle(.bordered)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .padding()
+    }
+}
+
+#Preview {
+    ChoiceCity(
+        isForFrom: true,
+        isPresented: .constant(true),
+        selectedStation: .constant(nil)
+    )
 }

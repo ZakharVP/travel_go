@@ -10,21 +10,17 @@ import OpenAPIURLSession
 
 typealias NearestCityResponse = Components.Schemas.NearestCityResponse
 
-final class SettlementService: NetworkServiceProtocol {
+actor SettlementService: NetworkServiceProtocol {
+    private let client: Client
+    private let apiKey: String
     
-    let client: Client
-    let apiKey: String
-    
-    init(client: Client, apiKey: String) {
+    nonisolated init(client: Client = Client(serverURL: try! Servers.server1(), transport: URLSessionTransport()),
+                    apiKey: String = APIKeys.yandexStationKey) {
         self.client = client
         self.apiKey = apiKey
     }
     
-    func getNearestCity(
-        latitude: Double,
-        longitude: Double,
-        distance: Int? = nil
-    ) async throws -> NearestCityResponse {
+    func fetchNearestCity(latitude: Double, longitude: Double, distance: Int? = nil) async throws -> NearestCityResponse {
         let response = try await client.getNearestCity(
             query: .init(
                 apikey: apiKey,
@@ -34,5 +30,32 @@ final class SettlementService: NetworkServiceProtocol {
             )
         )
         return try response.ok.body.json
+    }
+    
+    // MARK: - Protocol Stubs (не используются в этом сервисе)
+    nonisolated func fetchCities() async throws -> [City] {
+        throw NetworkError(message: "Not implemented in SettlementService")
+    }
+    
+    nonisolated func fetchStations(for city: String) async throws -> [Station] {
+        throw NetworkError(message: "Not implemented in SettlementService")
+    }
+    
+    nonisolated func fetchCarrierInfo(code: String, system: String?) async throws -> Carrier {
+        throw NetworkError(message: "Not implemented in SettlementService")
+    }
+    
+    nonisolated func getScheduleBetweenStations(
+        from: String,
+        to: String,
+        date: String? = nil,
+        lang: String? = nil,
+        format: String? = nil,
+        transportTypes: String? = nil,
+        limit: Int? = nil,
+        offset: Int? = nil,
+        transfers: Bool? = nil
+    ) async throws -> Segments {
+        throw NetworkError(message: "Not implemented in SettlementService")
     }
 }

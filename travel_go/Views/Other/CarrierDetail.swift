@@ -13,7 +13,7 @@ struct CarrierDetail: View {
     
     //MARK: - Properties
     
-    let mockCarrier: MockCarrier
+    let carrier: Carrier
     @Environment(\.dismiss) private var dismiss
     
     //MARK: - Content
@@ -23,10 +23,22 @@ struct CarrierDetail: View {
             VStack(spacing: .zero) {
                 headerImage
                 carrierTitle
-                emailBlock
-                phoneBlock
-                Spacer()
                 
+                if let email = carrier.email, !email.isEmpty {
+                    emailBlock(email: email)
+                } else {
+                    // Заглушка если email нет
+                    emailBlock(email: "info@example.com")
+                }
+                
+                if let phone = carrier.phone, !phone.isEmpty {
+                    phoneBlock(phone: phone)
+                } else {
+                    // Заглушка если телефон нет
+                    phoneBlock(phone: "8 (800) 123-45-67")
+                }
+                
+                Spacer()
             }
         }
         .background(Color(.systemBackground))
@@ -34,7 +46,7 @@ struct CarrierDetail: View {
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
+            ToolbarItem(placement: .navigationBarLeading) {
                 backButton
             }
         }
@@ -46,50 +58,52 @@ struct CarrierDetail: View {
         Image(.mocRGD)
             .resizable()
             .scaledToFit()
-            .frame(width: 343, height: 343)
-            .padding(.top, 16)
+            .frame(width: 343, height: 104)
+            .padding(.top, 8)
     }
     
     private var carrierTitle: some View {
         HStack {
-            Text("ОАО \"РЖД\"")
+            Text(carrier.title)
                 .font(.system(size: 24, weight: .bold))
                 .foregroundColor(.primary)
             Spacer()
         }
         .frame(height: 45)
         .padding(.horizontal, 16)
-        .padding(.top, 16)
+        .padding(.top, 12)
     }
     
-    private var emailBlock: some View {
+    private func emailBlock(email: String) -> some View {
         VStack(alignment: .leading, spacing: 8) {
             Text("E-mail")
                 .font(.system(size: 17))
                 .foregroundColor(.primary)
             
-            Text("I.logkina@yandex.ru")
+            Text(email)
                 .font(.system(size: 12))
                 .foregroundColor(Color("blueUniversal"))
         }
         .frame(height: 60)
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.horizontal, 16)
+        .padding(.top, 8)
     }
     
-    private var phoneBlock: some View {
+    private func phoneBlock(phone: String) -> some View {
         VStack(alignment: .leading, spacing: 8) {
             Text("Телефон")
                 .font(.system(size: 17))
                 .foregroundColor(.primary)
             
-            Text("8 (926) 281-01-01")
+            Text(phone)
                 .font(.system(size: 12))
                 .foregroundColor(Color("blueUniversal"))
         }
         .frame(height: 60)
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.horizontal, 16)
+        .padding(.top, 8) 
     }
     
     //MARK: - ToolbarItem Back Button
@@ -103,14 +117,4 @@ struct CarrierDetail: View {
                 .font(.system(size: 20))
         }
     }
-}
-
-// MARK: - CarrierDetail_Preview
-
-#Preview {
-    CarrierDetail(mockCarrier: MockCarrier(
-        name: "ОАО \"РЖД\"",
-        price: 0.11,
-        duration: "8 (926) 281-11-11"
-    ))
 }

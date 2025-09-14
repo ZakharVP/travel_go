@@ -10,12 +10,12 @@ import OpenAPIURLSession
 
 typealias Segments = Components.Schemas.Segments
 
-final class SearchService: NetworkServiceProtocol {
+actor SearchService: NetworkServiceProtocol {
+    private let client: Client
+    private let apiKey: String
     
-    let client: Client
-    let apiKey: String
-    
-    init(client: Client, apiKey: String) {
+    nonisolated init(client: Client = Client(serverURL: try! Servers.server1(), transport: URLSessionTransport()),
+                    apiKey: String = APIKeys.yandexStationKey) {
         self.client = client
         self.apiKey = apiKey
     }
@@ -46,5 +46,22 @@ final class SearchService: NetworkServiceProtocol {
             )
         )
         return try response.ok.body.json
+    }
+    
+    // MARK: - Protocol Stubs
+    nonisolated func fetchCities() async throws -> [City] {
+        throw NetworkError(message: "Not implemented in SearchService")
+    }
+    
+    nonisolated func fetchStations(for city: String) async throws -> [Station] {
+        throw NetworkError(message: "Not implemented in SearchService")
+    }
+    
+    nonisolated func fetchCarrierInfo(code: String, system: String?) async throws -> Carrier {
+        throw NetworkError(message: "Not implemented in SearchService")
+    }
+    
+    nonisolated func fetchNearestCity(latitude: Double, longitude: Double, distance: Int?) async throws -> NearestCityResponse {
+        throw NetworkError(message: "Not implemented in SearchService")
     }
 }
